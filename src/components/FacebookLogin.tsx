@@ -3,7 +3,7 @@ import React from 'react';
 const FacebookLogin: React.FC = () => {
   const handleFacebookLogin = () => {
     const appId = "951278136768463"; 
-    const redirectUri = `https://react-with-oauth2-u925-8h28n7mrv-lymannphys-projects.vercel.app/auth/facebook/callback`; 
+    const redirectUri = `https://oauth-vert.vercel.app/auth/facebook/callback`; 
     const scope = 'email public_profile';
 
     const facebookAuthUrl = `https://www.facebook.com/v14.0/dialog/oauth?` +
