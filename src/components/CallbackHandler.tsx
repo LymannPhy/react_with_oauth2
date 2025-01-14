@@ -15,58 +15,72 @@ const CallbackHandler: React.FC = () => {
       try {
         const searchParams = new URLSearchParams(location.search);
         const code = searchParams.get('code');
-
+    
         if (!code) {
           setError('No authorization code received');
           return;
         }
-
+    
         // Prevent processing the same code multiple times
         if (processedCode.current === code) {
           return;
         }
         processedCode.current = code;
+    
+        console.log('Sending authorization code to backend:', code);
+    
+        const isGoogle = location.pathname.includes('google');
+        const apiUrl = isGoogle
+          ? 'http://localhost:8000/api/v1/auth/google'
+          : 'http://localhost:8000/api/v1/auth/facebook';
 
-        console.log('Sending code to backend:', code);
+        console.log(`Sending ${isGoogle ? 'Google' : 'Facebook'} authorization code to backend:`, code);
 
-        const response = await fetch('http://localhost:8000/auth/google', {
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          credentials: 'include',
           body: JSON.stringify({ code }),
         });
-
+    
+        console.log('Backend response:', response);
+    
         if (!response.ok) {
+          // Log and handle backend errors
           const errorData = await response.json();
-          // Only set error if it's not a duplicate token error
-          if (!errorData.detail?.includes('Bad Request')) {
-            throw new Error(errorData.detail || 'Login failed');
-          }
-          return;
+          console.error('Error data from backend:', errorData);
+    
+          throw new Error(errorData.detail || 'Login failed');
         }
-
+    
+        // Parse the successful response
         const data = await response.json();
-        console.log('Received response:', data);
-
-        if (!data.user || !data.access_token || !data.refresh_token) {
+        console.log('Parsed response data:', data);
+    
+        // Validate expected fields in the response
+        if (!data.payload || !data.payload.user || !data.payload.access_token || !data.payload.refresh_token) {
           throw new Error('Invalid response data');
         }
-
-        setAuthState(data.user, {
-          access_token: data.access_token,
-          refresh_token: data.refresh_token,
-          token_type: data.token_type,
+    
+        // Set authentication state (update context or state with user info and tokens)
+        setAuthState(data.payload.user, {
+          access_token: data.payload.access_token,
+          refresh_token: data.payload.refresh_token,
+          token_type: 'bearer',
         });
-        
+    
+        // Navigate to the dashboard
         navigate('/dashboard', { replace: true });
       } catch (error) {
         console.error('Login error:', error);
-        if (error instanceof Error && !error.message.includes('Bad Request')) {
-          setError(error.message || 'An unexpected error occurred');
-        }
+    
+        // Display error message
+        setError(error instanceof Error ? error.message : 'An unexpected error occurred');
       }
     };
+    
 
     handleCallback();
   }, [location.search, navigate, setAuthState]);

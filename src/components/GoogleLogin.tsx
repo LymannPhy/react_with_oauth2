@@ -2,9 +2,9 @@ import React from 'react';
 
 const GoogleLogin: React.FC = () => {
   const handleGoogleLogin = () => {
-    const clientId = "864319511903-9ppi277qfje6aa3nt2obh0d1tohlro2m.apps.googleusercontent.com";
+    const clientId = "584934236339-5bjir3arta5iumk19q9j2vuaejp0b9bl.apps.googleusercontent.com";
     // Update this to match your Google Cloud Console configuration
-    const redirectUri = `${window.location.origin}/auth/google/callback`;
+    const redirectUri = `http://localhost:5173/auth/google/callback`;
     const scope = 'email profile';
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` + 

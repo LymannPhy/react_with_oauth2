@@ -11,7 +11,7 @@ const LoginPage: React.FC = () => {
   const { setAuthState } = useAuth();
 
   const handleGoogleLogin = () => {
-    const clientId = "864319511903-9ppi277qfje6aa3nt2obh0d1tohlro2m.apps.googleusercontent.com";
+    const clientId = "584934236339-5bjir3arta5iumk19q9j2vuaejp0b9bl.apps.googleusercontent.com";
     const redirectUri = `${window.location.origin}/auth/google/callback`;
     const scope = 'email profile';
     
@@ -23,6 +23,21 @@ const LoginPage: React.FC = () => {
 
     window.location.href = googleAuthUrl;
   };
+
+  const handleFacebookLogin = () => {
+    const clientId = '951278136768463'; // Replace with your Facebook App ID
+    const redirectUri = `${window.location.origin}/auth/facebook/callback`;
+    const scope = 'email';
+  
+    const facebookAuthUrl = `https://www.facebook.com/v12.0/dialog/oauth?` +
+      `client_id=${encodeURIComponent(clientId)}&` +
+      `redirect_uri=${encodeURIComponent(redirectUri)}&` +
+      `scope=${encodeURIComponent(scope)}&` +
+      `response_type=code`;
+  
+    window.location.href = facebookAuthUrl;
+  };
+  
 
   const handleTraditionalLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,6 +154,21 @@ const LoginPage: React.FC = () => {
             </svg>
             Sign in with Google
           </button>
+          <div>
+            <button
+              onClick={handleFacebookLogin}
+              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
+            >
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.406.593 24 1.325 24h11.495V14.708h-3.125v-3.624h3.125V8.305c0-3.1 1.893-4.786 4.657-4.786 1.325 0 2.463.098 2.794.142v3.24l-1.918.001c-1.504 0-1.797.714-1.797 1.762v2.309h3.593l-.467 3.623h-3.126V24h6.126C23.406 24 24 23.407 24 22.675V1.325C24 .593 23.407 0 22.675 0z"
+                />
+              </svg>
+              Sign in with Facebook
+            </button>
+          </div>
+
         </div>
 
         {/* Register Link */}
