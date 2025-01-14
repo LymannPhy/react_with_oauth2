@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
   };
 
   const handleFacebookLogin = () => {
-    const clientId = '951278136768463'; // Replace with your Facebook App ID
+    const clientId = '951278136768463';
     const redirectUri = `${window.location.origin}/auth/facebook/callback`;
     const scope = 'email';
   
